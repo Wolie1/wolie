@@ -275,3 +275,4 @@ myEnemy,
 true
 )
 tiles.placeOnRandomTile(myEnemy, sprites.dungeon.floorDark2)
+myEnemy.follow(mySprite)
