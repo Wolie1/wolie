@@ -1,5 +1,11 @@
+namespace SpriteKind {
+    export const Block = SpriteKind.create()
+}
 let aArme__0 = 0
-controller.up.onEvent(ControllerButtonEvent.Repeated, function () {
+scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.stairWest, function (sprite, location) {
+    game.gameOver(true)
+})
+controller.anyButton.onEvent(ControllerButtonEvent.Repeated, function () {
     piege = sprites.create(img`
         4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 
         4 4 4 4 4 5 4 4 4 4 5 4 4 4 4 4 
@@ -31,11 +37,6 @@ controller.up.onEvent(ControllerButtonEvent.Repeated, function () {
     InterpolationCurve.Curve
     ), music.PlaybackMode.UntilDone)
 })
-sprites.onOverlap(SpriteKind.Enemy, SpriteKind.Projectile, function (sprite, otherSprite) {
-    myEnemy.follow(mySprite)
-    game.gameOver(true)
-    info.setLife(0)
-})
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Projectile, function (sprite) {
     game.gameOver(false)
 })
@@ -48,7 +49,6 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSp
     pause(100)
 })
 let piege: Sprite = null
-let myEnemy: Sprite = null
 let mySprite: Sprite = null
 mySprite = sprites.create(img`
     . . . . . . f f f f . . . . . . 
@@ -147,7 +147,7 @@ true
 tiles.setTilemap(tilemap`level1`)
 tiles.placeOnRandomTile(mySprite, sprites.dungeon.stairLadder)
 scene.cameraFollowSprite(mySprite)
-myEnemy = sprites.create(img`
+let myEnemy = sprites.create(img`
     . . . . . . . . . . b 5 b . . . 
     . . . . . . . . . b 5 b . . . . 
     . . . . . . b b b b b b . . . . 
@@ -165,7 +165,7 @@ myEnemy = sprites.create(img`
     . . . c c c c c c c c b b . . . 
     . . . . . . . . . . . . . . . . 
     `, SpriteKind.Enemy)
-myEnemy.follow(mySprite, 100)
+myEnemy.follow(null, 100)
 animation.runImageAnimation(
 myEnemy,
 [img`
@@ -274,4 +274,4 @@ myEnemy,
 100,
 true
 )
-tiles.placeOnRandomTile(myEnemy, sprites.dungeon.stairWest)
+tiles.placeOnRandomTile(myEnemy, sprites.dungeon.floorDark2)
