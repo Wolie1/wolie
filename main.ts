@@ -1,8 +1,18 @@
 namespace SpriteKind {
     export const Block = SpriteKind.create()
+    export const niveaux = SpriteKind.create()
 }
 let aArme__0 = 0
+scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.stairLadder, function (sprite, location) {
+    tiles.setCurrentTilemap(tilemap`niveau16`)
+    tiles.setCurrentTilemap(tilemap`niveau1`)
+})
 scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.stairWest, function (sprite, location) {
+    tiles.setCurrentTilemap(tilemap`niveau16`)
+    game.gameOver(true)
+})
+scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.chestClosed, function (sprite, location) {
+    tiles.setCurrentTilemap(tilemap`niveau1`)
     game.gameOver(true)
 })
 controller.anyButton.onEvent(ControllerButtonEvent.Repeated, function () {
@@ -40,17 +50,12 @@ controller.anyButton.onEvent(ControllerButtonEvent.Repeated, function () {
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Projectile, function (sprite) {
     game.gameOver(false)
 })
-sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, otherSprite) {
-    sprites.destroyAllSpritesOfKind(SpriteKind.Player, effects.spray, 200)
-    sprites.destroy(mySprite)
-})
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
     info.changeLifeBy(-1)
     pause(100)
 })
 let piege: Sprite = null
-let mySprite: Sprite = null
-mySprite = sprites.create(img`
+let mySprite = sprites.create(img`
     . . . . . . f f f f . . . . . . 
     . . . . f f f 2 2 f f f . . . . 
     . . . f f f 2 2 2 2 f f f . . . 
@@ -145,7 +150,7 @@ mySprite,
 true
 )
 tiles.setTilemap(tilemap`level1`)
-tiles.placeOnRandomTile(mySprite, sprites.dungeon.stairLadder)
+tiles.placeOnRandomTile(mySprite, assets.tile`floorLight3`)
 scene.cameraFollowSprite(mySprite)
 let myEnemy = sprites.create(img`
     . . . . . . . . . . b 5 b . . . 
@@ -274,5 +279,7 @@ myEnemy,
 100,
 true
 )
-tiles.placeOnRandomTile(myEnemy, sprites.dungeon.floorDark2)
+tiles.placeOnRandomTile(myEnemy, sprites.dungeon.floorDark0)
 myEnemy.follow(mySprite)
+mySprite.setVelocity(100, 100)
+myEnemy.setVelocity(-100, -100)
